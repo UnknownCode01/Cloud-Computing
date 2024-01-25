@@ -1,2 +1,2 @@
 # Cloud-Computing
-Scheduling Algorithms -> FCFS SJF min-min max-min 
+Scheduling Algorithms -> FCFS, SJF, min-min, max-min 
