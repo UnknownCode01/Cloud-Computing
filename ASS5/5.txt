@@ -1,0 +1,179 @@
+5
+1. To start the lab session, choose  Start Lab in the upper-right corner of the page.
+
+The lab session starts.
+
+A timer displays in the upper-right corner of the page and shows the time remaining in the session.
+
+Tip: To refresh the session length at any time, choose Start Lab again before the timer reaches 0:00.
+
+Before continuing, wait until the lab environment is ready. The environment is ready when the lab details appear on the right side of the page and the circle icon next to the AWS link in the upper-left corner turns green.
+
+2. To return to these instructions, choose the  Readme link in the upper-right corner.
+
+3. To connect to the AWS Management Console, choose the AWS link in the upper-left corner, above the terminal window.
+
+A new browser tab opens and connects you to the AWS Management Console.
+
+Tip: If a new browser tab does not open, a banner or icon is usually at the top of your browser with the message that your browser is preventing the site from opening pop-up windows. Choose the banner or icon, and then choose Allow pop-ups.
+
+Note: You are using the console through the lab environment, so you are not incurring any actual costs. However, in the real world, when using a personal or business account to access the console, users incur charges for use of specific AWS services.
+
+Task 1. Create an S3 bucket using the AWS CLI
+In this task, you will create an S3 bucket using the AWS Command Line Interface (AWS CLI). The AWS CLI is an open-source tool that you can use to interact with AWS services using commands in your command line shell.
+
+4. Choose the Services and Developer Tools and choose CloudShell.
+
+If a welcome pop-up window appears, choose Close.
+
+AWS CloudShell is a browser-based shell that gives you command line access to your AWS resources in the selected AWS Region.
+
+5. Copy and paste the following code into a text editor:
+
+cd ~
+aws s3api create-bucket --bucket (bucket-name) --region us-east-1
+6. In the code that you copied, replace (bucket-name) with a unique Domain Name System (DNS)-compliant name for your new bucket.
+
+Follow these naming guidelines:
+
+The name must be unique across all existing bucket names in Amazon S3.
+The name must be between 3 and 63 characters long.
+The name can consist only of lowercase letters, numbers, dots (.), and hyphens (-).
+The name must begin and end with a letter or number.
+The name must not be formatted as an IP address (for example, 192.168.5.4).
+After you create the bucket, you cannot change the name, so choose wisely.
+Choose a bucket name that reflects the objects in the bucket. This is because the bucket name is visible in the URL that points to the objects that you’re going to put in your bucket.
+Tip: The following is an example bucket name: mylabbucket12345
+
+Note: The us-east-1 Region has been entered in the command. When you create a bucket, the best practice is to choose a Region close to you to minimize latency and costs, or to address regulatory requirements. Objects stored in a Region never leave that Region unless you explicitly transfer them to another Region.
+
+7. Run the updated code in the CloudShell terminal.
+
+If a pop-up window appears, choose Paste.
+
+The output should look similar to the following:
+
+{
+   "Location": "/mylabbucket12345"
+}
+Note: When you create a bucket with this command, the bucket is open to the public. We recommend that you keep all settings enabled unless you know that you need to turn off one or more of them for your use case, such as to host a public website.
+
+Task 2. Add a bucket policy
+In this task, you will add a bucket policy through the AWS CLI to make the content publicly available.
+
+8. In the console, choose the Services menu, locate the Storage section, and choose S3.
+9. Choose the name of the bucket that you just created.
+10. Choose the Permissions tab. Under Block public access (bucket settings) choose Edit. Remove the checkmark for Block all public access. Choose Save changes. Confirm the changes.
+11. Under Object Ownership choose Edit. Choose ACLs enabled. Check the acknowledgement and choose Save changes.
+12. In the Bucket policy section, choose Edit.
+13. To grant public read access for your website, copy and paste the following bucket policy into the policy editor.
+{
+   "Version":"2012-10-17",
+   "Statement":[
+      {
+         "Sid":"PublicReadForGetBucketObjects",
+         "Effect":"Allow",
+         "Principal":"*",
+         "Action":[
+            "s3:GetObject"
+         ],
+         "Resource":[
+            "arn:aws:s3:::example-bucket/*"
+         ]
+      }
+   ]
+}
+14. In the policy, replace example-bucket with the name of your bucket.
+15. At the bottom of the page, choose Save changes.
+Task 3. Upload an HTML document
+In this task, you will upload the index.html file for your webpage to the S3 bucket.
+
+16. Open the context menu (right-click) for the following link, and then choose Save link as: index.html
+
+17. Save the index.html file to your local computer.
+
+18. In the console, choose the Objects tab.
+
+19. Upload the index.html file to your bucket.
+
+Choose Upload.
+Drag and drop the index.html file onto the upload page. An alternative is to choose Add files, navigate to the file, and choose Open.
+20. Expand the Permissions section.
+
+21. Under Predefined ACLs, select Grant public-read access.
+
+A warning message similar to Granting public-read access is not recommend appears below the setting you selected.
+
+22. Below the warning, check the box next to I understand....
+
+23. At the bottom of the page, choose Upload.
+
+24. Choose Close.
+
+The index.html file appears in the Objects list.
+
+Task 4. Test your website
+25. Select the Properties tab, and scroll down to the Static website hosting section.
+
+26. Choose Edit.
+
+27. Select Enable.
+
+28. In the Index document text box, enter index.html
+
+29. Select Save changes.
+
+30. Scroll down to the Static website hosting section again, and copy the Bucket website endpoint URL to your clipboard.
+
+31. Open a new tab in your web browser, paste the URL you just copied, and press Enter.
+
+The Hello World webpage should display. You have successfully hosted a static website using an S3 bucket!
+
+Task 5. Create a CloudFront distribution to serve your website
+In this task, you will create an Amazon CloudFront distribution to serve your website.
+
+32. Choose the Services menu, locate the Networking & Content Delivery section, and choose CloudFront.
+
+33. Choose Create a CloudFront Distribution.
+
+34. Under Origin, choose the text box next to Origin domain and select the endpoint from your S3 bucket.
+
+35. For Viewer Protocol Policy, ensure that HTTP and HTTPS is selected. Under Web Application Firewall (WAF) choose Do not enable security protections.
+
+36. Scroll to the bottom of the page and select Create Distribution.
+
+A new CloudFront distribution displays in the distributions list. The Status will say Deploying until your website has been distributed. This may take up to 20 minutes.
+
+When the Status says Enabled, you can test your distribution.
+
+37. Copy the Domain Name value for your distribution and save it to a text editor to use in a later step.
+
+38. Create a new HTML file to test the distribution.
+
+Find and download an image from the internet.
+Navigate to your S3 bucket and upload the image file to it, making sure to grant public access as you did when uploading the HTML file earlier in this lab.
+Create a new text file using Notepad and copy the following text into it:
+<html>
+    <head>My CloudFront Test</head>
+    <body>
+        <p>My test content goes here.</p>
+        <p><img src="http://domain-name/object-name" alt="my test image">
+    </body>
+</html>
+Replace domain-name with the domain name that you copied earlier for your CloudFront distribution.
+Replace object-name with the file name of the picture file that you uploaded to your S3 bucket.
+The edited line of code should look similar to the following:
+
+<p><img src="http://d2f1zrxb2zaf30.cloudfront.net/picture.jpg" alt="my test image">
+Save the text file with an HTML extension.
+39. Use an internet browser to open the HTML file that you just created.
+If the image that you uploaded shows, your CloudFront distribution was successful. If not, repeat the lab.
+
+Lab complete
+Congratulations! You have completed the lab.
+
+40. Log out of the AWS Management Console.
+
+In the upper-right corner of the page, choose your user name. Your user name begins with voclabs/user.
+Choose Sign Out.
+41. Choose End Lab at the top of this page, and then select Yes to confirm that you want to end the lab.
