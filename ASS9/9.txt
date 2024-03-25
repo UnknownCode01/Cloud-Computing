@@ -1,0 +1,108 @@
+Module 9 Lab Creating a CloudWatch Alarm That Initiates an Amazon SNS Message
+Lab overview
+In this lab, you create an Amazon CloudWatch alarm to notify you when the account has spent over a certain amount of money. The alarm sends a message to Amazon Simple Notification Service (Amazon SNS) to send an email or text notification.
+
+Duration
+This lab requires approximately 40 minutes to complete.
+
+Access the AWS Management Console
+To start the lab session, choose  Start Lab in the upper-right corner of the page.
+
+The lab session starts.
+
+A timer displays in the upper-right corner of the page and shows the time remaining in the session.
+
+Tip To refresh the session length at any time, choose Start Lab again before the timer reaches 000.
+
+Before continuing, wait until the lab environment is ready. The environment is ready when the lab details appear on the right side of the page and the circle icon next to the AWS link in the upper-left corner turns green.
+
+To return to these instructions, choose the  Readme link in the upper-right corner.
+
+To connect to the AWS Management Console, choose the AWS link in the upper-left corner, above the terminal window.
+
+A new browser tab opens and connects you to the AWS Management Console.
+
+Tip If a new browser tab does not open, a banner or icon is usually at the top of your browser with the message that your browser is preventing the site from opening pop-up windows. Choose the banner or icon, and then choose Allow pop-ups.
+
+Note You are using the console through the lab environment, so you are not incurring any actual costs. However, in the real world, when using a personal or business account to access the console, users incur charges for use of specific AWS services.
+
+Task 1. Create and subscribe to an SNS topic
+Choose the Services menu, locate the Application Integration section, and choose Simple Notification Service.
+
+In the left navigation pane, select Topics.
+
+Note If you don't see the left navigation pane, choose the hamburger menu  icon.
+
+Select Create topic.
+
+A Topic acts as a communication channel where messages from alerts and events can be posted.
+
+For Type, select Standard.
+
+For Name, enter MoneyAlert
+
+Choose Create topic.
+
+Now, you will subscribe to that topic so when a message is posted to the topic, it will be pushed to your phone or email.
+
+In the Subscriptions section, choose Create subscription.
+
+For Topic ARN, select the MoneyAlert topic you created.
+
+For Protocol, select Email to get an email alert.
+
+For Endpoint, enter your email address or phone number, depending on what you selected for Protocol.
+
+Select Create subscription.
+
+Note A confirmation message displays at the top of the page. Make sure to Confirm subscription once the email is received.
+
+Task 2. Create a CloudWatch alarm
+Now you will create the billing alert.
+
+Choose the Services menu, locate the Management & Governance section, and choose CloudWatch.
+
+In the left navigation pane, select Alarms.
+
+Choose Create alarm.
+
+Choose Select metric.
+
+Select Billing.
+
+Select Total Estimated Charge.
+
+Check the box for EstimatedCharges.
+
+Choose Select metric.
+
+In the Conditions section, configure the following
+
+For Threshold type, select Static.
+For Whenever EstimatedCharges is…, select Greater.
+For than..., enter 100 into the textbox.
+Choose Next.
+
+In the Notification section, configure the following
+
+For Alarm state trigger, choose In alarm.
+For Send a notification to the following SNS topic, choose Select an existing SNS topic.
+For Send a notification to..., choose the MoneyAlert topic.
+Choose Next.
+
+For Alarm name, enter MoneyAlertAlarm
+
+Choose Next.
+
+Review the settings. Scroll down and choose Create alarm.
+
+Congratulations! You have set up a CloudWatch alarm that uses Amazon SNS to send an alert when the cost of services reaches $100.
+
+Lab complete
+Congratulations! You have completed the lab.
+
+Log out of the AWS Management Console.
+
+In the upper-right corner of the page, choose your user name. Your user name begins with voclabsuser.
+Choose Sign Out.
+Choose End Lab at the top of this page, and then select Yes to confirm that you want to end the lab.
