@@ -46,14 +46,14 @@ public class RR {
         for(int i=0;i<n;i++){   //Initializing empty added q
             added_q[i] = 0;
         }
-        for(int i=0;i<n;i++){
+        for(int i=0;i<n;i++){   //Least Arrival time
             if(at[i]<pval){
                 pval=at[i];
                 p=i;
             }
         }
         int timer = 0;
-        while(timer < at[p]) //Incrementing Timer until the first process arrives
+        while(timer < at[p])    //Incrementing Timer until the first process arrives
 			timer++; 
 
         q.add(pid[p]);
